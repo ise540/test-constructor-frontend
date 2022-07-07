@@ -1,6 +1,8 @@
 import React, { FC } from "react";
 import { useNavigate } from "react-router";
 import styled from "styled-components";
+import { useAppDispatch } from "../hooks/redux";
+import { fetchUserLogout } from "../store/auth/asyncActions";
 import { NavButton } from "./Button";
 
 interface HeaderProps {}
@@ -12,14 +14,19 @@ const StyledHeader = styled.nav<HeaderProps>`
 
 export const Header: FC<HeaderProps> = () => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
-  const navToRegistration = ()=> {
-    navigate("/registration", {replace: true})
-  }
+  const logout = () => {
+    dispatch(fetchUserLogout());
+  };
 
-  const navToLogin = ()=> {
-    navigate("/login", {replace: true})
-  }
+  const navToRegistration = () => {
+    navigate("/registration", { replace: true });
+  };
+
+  const navToLogin = () => {
+    navigate("/login", { replace: true });
+  };
 
   return (
     <StyledHeader>
@@ -28,6 +35,9 @@ export const Header: FC<HeaderProps> = () => {
       </NavButton>
       <NavButton onClick={navToLogin} fontSize="15px" margin="2px">
         Вход
+      </NavButton>
+      <NavButton onClick={logout} fontSize="15px" margin="2px">
+        ВЫХОД
       </NavButton>
     </StyledHeader>
   );

@@ -1,9 +1,19 @@
 import { Button, Input } from "@mui/material";
 import { FC, useState } from "react";
+import { useAppDispatch, useAppSelector } from "../hooks/redux";
+import { fetchUserRegistration } from "../store/auth/asyncActions";
 
 export const Registration: FC = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+
+  const userState = useAppSelector((state) => state.user);
+
+  const dispatch = useAppDispatch();
+
+  function registration() {
+    dispatch(fetchUserRegistration(email, password));
+  }
 
   return (
     <div>
@@ -17,7 +27,20 @@ export const Registration: FC = () => {
         onChange={(event) => setPassword(event.target.value)}
         placeholder="password"
       />
-      <Button>Регистрация</Button>
+      <Button onClick={registration}>Регистрация</Button>
+      <div>
+        {userState.isLoading ? (
+          "loading..."
+        ) : (
+          <div>
+            <div>{userState.user?.email}</div>
+            <div>{userState.user?.id}</div>
+            <div>{userState.user?.isActivated}</div>
+            <div>{userState.token}</div>
+            <div>{userState.error}</div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
