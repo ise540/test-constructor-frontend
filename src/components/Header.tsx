@@ -1,24 +1,23 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import { useNavigate } from "react-router";
 import styled from "styled-components";
-import { useAppDispatch } from "../hooks/redux";
-import { fetchUserLogout } from "../store/auth/asyncActions";
+import {  useAppSelector } from "../hooks/redux";
 import { NavButton } from "./Button";
+import { DropdownMenuButton } from "./DropdownMenuButton";
 
 interface HeaderProps {}
 
 const StyledHeader = styled.nav<HeaderProps>`
   width: 100%;
   background-color: #b3b3b3;
-`;
+  display: flex;
+  justify-content: flex-end;
+`
 
 export const Header: FC<HeaderProps> = () => {
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
 
-  const logout = () => {
-    dispatch(fetchUserLogout());
-  };
+  const isAuth = useAppSelector((state) => state.user.isAuth);
 
   const navToRegistration = () => {
     navigate("/registration", { replace: true });
@@ -30,15 +29,14 @@ export const Header: FC<HeaderProps> = () => {
 
   return (
     <StyledHeader>
-      <NavButton onClick={navToRegistration} fontSize="15px" margin="2px">
-        Регистрация
-      </NavButton>
-      <NavButton onClick={navToLogin} fontSize="15px" margin="2px">
-        Вход
-      </NavButton>
-      <NavButton onClick={logout} fontSize="15px" margin="2px">
-        ВЫХОД
-      </NavButton>
+      {!isAuth ? (
+        <>
+          <NavButton onClick={navToRegistration}>Регистрация</NavButton>
+          <NavButton onClick={navToLogin}>Вход</NavButton>
+        </>
+      ) : (
+        <DropdownMenuButton/>
+      )}
     </StyledHeader>
   );
 };

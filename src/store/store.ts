@@ -10,8 +10,8 @@ export const setupStore = () => {
     return configureStore({
         reducer: rootReducer,
         middleware: (getDefaultMiddleware) => 
-            getDefaultMiddleware({ thunk: true }).concat(save({states:['user']})),
-        preloadedState: load({states:['user']})
+            getDefaultMiddleware({ thunk: true }).concat(save({states:['user'], namespace: 'user_info'})),
+        preloadedState: load({states:['user'], namespace: 'user_info'})
     })
 };
 

@@ -1,18 +1,21 @@
 import { Button, Input } from "@mui/material";
 import { FC, useState } from "react";
+import { useNavigate } from "react-router";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
-import { fetchUserLogin, fetchUserRegistration } from "../store/auth/asyncActions";
+import { fetchUserLogin } from "../store/auth/asyncActions";
 
 export const Login: FC = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
   const userState = useAppSelector((state) => state.user);
+  const navigate = useNavigate();
 
   const dispatch = useAppDispatch();
 
   function login() {
     dispatch(fetchUserLogin(email, password));
+    navigate('/')
   }
 
   return (

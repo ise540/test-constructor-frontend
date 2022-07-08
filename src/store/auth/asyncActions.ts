@@ -17,6 +17,8 @@ export const fetchUserRegistration =
         password,
       });
       dispatch(fetchLoginSuccess(response.data));
+      localStorage.setItem('accessToken', response.data.accessToken)
+
     } catch (e: any) {
       dispatch(fetchLoginError(e.response.data.error));
     }
@@ -33,6 +35,7 @@ export const fetchUserLogin =
         password,
       });
       dispatch(fetchLoginSuccess(response.data));
+      localStorage.setItem('accessToken', response.data.accessToken)
     } catch (e: any) {
       dispatch(fetchLoginError(e.response.data.message));
     }
@@ -44,6 +47,7 @@ export const fetchUserLogout = () => async (dispatch: AppDispatch, getState: () 
     dispatch(fetchStart());
     await $api.post<AuthResponse>("/user/logout", getConfig(state.user.token));
     dispatch(fetchLogout());
+    localStorage.removeItem('accessToken')
   } catch (e: any) {
     dispatch(fetchLoginError(e.response.data.message));
   }

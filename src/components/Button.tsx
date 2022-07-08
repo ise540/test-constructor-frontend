@@ -10,9 +10,9 @@ interface ButtonProps {
 }
 
 const StyledButton = styled(Button)<ButtonProps>`
-  margin: ${(props) => props.margin};
+  margin: 2px;
   font-family: 'Roboto Slab', serif;
-  font-size: ${(props) => props.fontSize};
+  font-size: 15px;
   border:1px solid black;
   color: black;
   :hover {
@@ -27,7 +27,7 @@ export const NavButton: FC<ButtonProps> = ({
   children,
 }) => {
   return (
-    <StyledButton onClick={onClick} fontSize={fontSize} margin={margin}>
+    <StyledButton onClick={onClick} >
       {children}
     </StyledButton>
   );
