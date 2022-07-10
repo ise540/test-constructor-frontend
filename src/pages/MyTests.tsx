@@ -1,12 +1,13 @@
-import { Button, Input } from "@mui/material";
+import { Button } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useAppSelector } from "../hooks/redux";
+import { CreateTestModal } from "../components/CreateTestModal";
 import { useFetching } from "../hooks/useFetch";
 import TestService from "../services/TestService";
 
 export const MyTests = () => {
   const [tests, setTests] = useState<any>([]);
-  const [title, setTitle] = useState('')
+  const [isOpen, setOpen] = useState(false);
+
 
   const [testFetching, isTestLoading, testError] = useFetching(async () => {
     const fetchedTests = await TestService.getAll();
@@ -17,15 +18,12 @@ export const MyTests = () => {
     testFetching();
   }, [testFetching]);
 
-  const addQuestion = () => {
-    
-  }
-
   return (
     <div>
       <h1>My tests</h1>
-        <Input value={title} onChange={(event)=>setTitle(event.target.value)}></Input>
-        <Button onClick={addQuestion}>Добавить</Button>
+
+      <Button onClick={() => setOpen(true)}>Open modal</Button>
+      <CreateTestModal open={isOpen} setOpen={setOpen}/>
     </div>
   );
 };

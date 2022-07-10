@@ -5,6 +5,7 @@ import { useAppSelector } from "../hooks/redux";
 import { CompletedTests } from "../pages/CompletedTests";
 import { Login } from "../pages/Login";
 import { MyTests } from "../pages/MyTests";
+import { NewTest } from "../pages/NewTest";
 import { Profile } from "../pages/Profile";
 import { Registration } from "../pages/Registration";
 
@@ -26,6 +27,7 @@ export const AppRouter = () => {
             <Route path="profile" element={<Profile />} />
             <Route path="completed-tests" element={<CompletedTests />} />
             <Route path="my-tests" element={<MyTests />} />
+            <Route path="my-tests/new-test" element={<NewTest />} />
           </>
         )}
       </Route>
