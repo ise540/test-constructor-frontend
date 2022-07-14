@@ -1,4 +1,11 @@
-import { FormControlLabel, RadioGroup, Radio, FormGroup, Checkbox, Input } from "@mui/material";
+import {
+  FormControlLabel,
+  RadioGroup,
+  Radio,
+  FormGroup,
+  Checkbox,
+  Input,
+} from "@mui/material";
 import { FC } from "react";
 import { Types } from "../types/QuestionTypes";
 
@@ -11,10 +18,9 @@ export const AnswerForm: FC<AnswerFormProps> = ({ type, answers }) => {
   if (type === Types.CHECKBOX) {
     return (
       <FormGroup>
-        {answers.map(item => {
-            return <FormControlLabel control={<Checkbox />} label={item} />
+        {answers.map((item) => {
+          return <FormControlLabel control={<Checkbox />} label={item} />;
         })}
-        
       </FormGroup>
     );
   } else if (type === Types.RADIO) {
@@ -22,12 +28,15 @@ export const AnswerForm: FC<AnswerFormProps> = ({ type, answers }) => {
       <RadioGroup name="radio-buttons-group">
         {answers.map((item) => {
           return (
-            <FormControlLabel value={item} control={<Radio />} label={item} />
+            <>
+              <FormControlLabel value={item} control={<Radio />} label={item} />
+              <Input />
+            </>
           );
         })}
       </RadioGroup>
     );
   } else {
-    return <Input/>;
+    return <Input />;
   }
 };

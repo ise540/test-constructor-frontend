@@ -1,6 +1,5 @@
-import { CheckBox } from "@mui/icons-material";
-import { Card, Checkbox, FormControlLabel, Paper } from "@mui/material";
-import React, { FC } from "react";
+import { Checkbox, FormControlLabel, Paper } from "@mui/material";
+import { FC } from "react";
 import styled from "styled-components";
 
 interface QuestionProps {

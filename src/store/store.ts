@@ -1,9 +1,10 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { load, save } from "redux-localstorage-simple";
 import userReducer from "./auth/userSlice";
+import currentTestReducer from "./currentTest/currentTestSlice";
 import testsReducer from "./tests/testsSlice";
 
-const rootReducer = combineReducers({ user: userReducer, tests: testsReducer });
+const rootReducer = combineReducers({ user: userReducer, tests: testsReducer ,currentTest: currentTestReducer });
 
 export const setupStore = () => {
   return configureStore({

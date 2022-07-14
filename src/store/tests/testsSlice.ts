@@ -8,7 +8,7 @@ interface TestsState {
 }
 
 const initialState: TestsState = {
-  tests: [],
+  tests: []
 };
 
 export const testsSlice = createSlice({

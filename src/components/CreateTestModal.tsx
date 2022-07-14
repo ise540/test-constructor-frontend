@@ -4,7 +4,7 @@ import { useNavigate } from "react-router";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { NavButton } from "./Button";
 import { BasicModal } from "./Modal";
-import { createTest } from "../store/tests/testsSlice";
+import { createCurrentTest } from "../store/currentTest/currentTestSlice";
 import { v4 as uuidv4 } from "uuid";
 
 interface CreateTestModalProps {
@@ -25,7 +25,7 @@ export const CreateTestModal: FC<CreateTestModalProps> = ({
 
   const addTest = (title: string, userId: string) => {
     dispatch(
-        createTest({ title, authorId: userId, id: uuidv4(), questions: [] })
+      createCurrentTest({ title, authorId: userId, id: uuidv4(), questions: [] })
     );
     navigate("new-test");
   };

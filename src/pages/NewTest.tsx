@@ -1,17 +1,15 @@
-import { Button, Input } from "@mui/material";
-import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { useAppSelector } from "../hooks/redux";
-import { createQuestion } from "../store/tests/testsSlice";
+import { Button } from "@mui/material";
+import {  useState } from "react";
+import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { v4 as uuidv4 } from "uuid";
-import { Question } from "../components/Question";
+
 import { QuestionForm } from "../components/QuestionForm";
 
 export const NewTest = () => {
   const [description, setDescription] = useState("");
 
   const [questions, setQuestions] = useState<string[]>([]);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const user = useAppSelector((state) => state.user.user);
 
@@ -31,10 +29,3 @@ export const NewTest = () => {
     </div>
   );
 };
-
-// id: string;
-// description: string;
-// type: 'CHECKBOX' | 'RADIO' | 'TEXT';
-// order: number;
-// testId: string;
-// answers: IAnswer[];
