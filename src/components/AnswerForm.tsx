@@ -1,42 +1,59 @@
-import {
-  FormControlLabel,
-  RadioGroup,
-  Radio,
-  FormGroup,
-  Checkbox,
-  Input,
-} from "@mui/material";
-import { FC } from "react";
-import { Types } from "../types/QuestionTypes";
+import { RadioGroup, FormGroup, Input, Button } from "@mui/material";
+import { FC, useCallback, useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "../hooks/redux";
+import { IAnswer } from "../models/IAnswer";
+import { createCurrentAnswer } from "../store/currentTest/currentTestSlice";
+import { QuestionTypes } from "../types/QuestionTypes";
+import { RadioAnswer } from "./RadioAnswer";
+import { CheckboxAnswer } from "./CheckboxAnswer";
+import { InputAnswer } from "./InputAnswer";
 
 interface AnswerFormProps {
-  type: Types;
-  answers: string[];
+  type: QuestionTypes;
+  answers: IAnswer[];
+  questionId: string;
 }
 
-export const AnswerForm: FC<AnswerFormProps> = ({ type, answers }) => {
-  if (type === Types.CHECKBOX) {
+export const AnswerForm: FC<AnswerFormProps> = ({ type, questionId }) => {
+  const dispatch = useAppDispatch();
+  const currentAnswers = useAppSelector(
+    (state) =>
+      state.currentTest.currentTest.questions.find(
+        (item) => item.id === questionId
+      )?.answers
+  );
+
+  const addAnswer = useCallback(() => {
+    dispatch(createCurrentAnswer(questionId));
+  }, [dispatch, questionId]);
+
+  useEffect(() => {
+    if (!currentAnswers?.length) addAnswer();
+  }, [addAnswer, currentAnswers]);
+
+  if (type === QuestionTypes.CHECKBOX && currentAnswers) {
     return (
       <FormGroup>
-        {answers.map((item) => {
-          return <FormControlLabel control={<Checkbox />} label={item} />;
+        {currentAnswers.map((item) => {
+          return <CheckboxAnswer key={item.id} answer={item} />;
         })}
+        <Button onClick={() => addAnswer()}>Add answer</Button>
       </FormGroup>
     );
-  } else if (type === Types.RADIO) {
+  } else if (type === QuestionTypes.RADIO && currentAnswers) {
     return (
-      <RadioGroup name="radio-buttons-group">
-        {answers.map((item) => {
-          return (
-            <>
-              <FormControlLabel value={item} control={<Radio />} label={item} />
-              <Input />
-            </>
-          );
+      <RadioGroup>
+        {currentAnswers.map((item) => {
+          return <RadioAnswer key={item.id} answer={item} />;
         })}
+        <Button onClick={() => addAnswer()}>Add answer</Button>
       </RadioGroup>
     );
   } else {
-    return <Input />;
+    return currentAnswers?.length ? (
+      <InputAnswer answer={currentAnswers[0]} />
+    ) : (
+      <div>No answers</div>
+    );
   }
 };

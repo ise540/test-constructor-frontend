@@ -1,10 +1,10 @@
-import { Types } from "../types/QuestionTypes";
+import { QuestionTypes } from "../types/QuestionTypes";
 import { IAnswer } from "./IAnswer";
 
 export interface IQuestion {
     id: string;
     description: string;
-    type: Types;
+    type: QuestionTypes;
     order: number;
     testId: string;
     answers: IAnswer[];

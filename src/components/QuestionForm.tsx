@@ -1,5 +1,5 @@
 import {
-  Button,
+  IconButton,
   FormControl,
   InputLabel,
   MenuItem,
@@ -8,20 +8,18 @@ import {
   SelectChangeEvent,
   TextField,
 } from "@mui/material";
-import { FC, useState } from "react";
+import { FC } from "react";
 import styled from "styled-components";
-import { v4 as uuidv4 } from "uuid";
 import { AnswerForm } from "./AnswerForm";
-import { Types } from "../types/QuestionTypes";
-import { useAppDispatch, useAppSelector } from "../hooks/redux";
-import {
-  createCurrentQuestion,
-  updateCurrentQuestion,
-} from "../store/currentTest/currentTestSlice";
+import { QuestionTypes } from "../types/QuestionTypes";
+import { useAppDispatch } from "../hooks/redux";
+import { deleteCurrentQuestion, updateCurrentQuestion } from "../store/currentTest/currentTestSlice";
+import { Box } from "@mui/system";
+import { IQuestion } from "../models/IQuestion";
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
 interface QuestionFormProps {
-  id: string;
-  answers?: [];
+  question: IQuestion;
 }
 
 const StyledQuestion = styled(Paper)`
@@ -32,75 +30,61 @@ const StyledQuestion = styled(Paper)`
   padding: 10px;
 `;
 
-export const QuestionForm: FC<QuestionFormProps> = ({ id }) => {
-  const [answers, setAnswers] = useState<string[]>([]);
-  const [description, setDescription] = useState("");
-
-  const [type, setType] = useState<Types>(Types.RADIO);
+export const QuestionForm: FC<QuestionFormProps> = ({ question }) => {
   const dispatch = useAppDispatch();
-  const currentTest = useAppSelector((state) => state.currentTest.currentTest);
 
   const handleChange = (event: SelectChangeEvent) => {
-    setType(event.target.value as any);
-  };
-
-  const saveData = {
-    description,
-    type,
-    id,
-    order: 1,
-    testId: "sss",
-    answers: [
-      { id: "string", value: "string", correct: true, questionId: "123" },
-    ],
-  };
-
-  const saveQuestion = () => {
-    if (currentTest.questions.findIndex((item) => item.id === id) === -1) {
-      dispatch(createCurrentQuestion(saveData));
-    } else {
-      dispatch(updateCurrentQuestion(saveData));
-    }
-  };
-
-  const addAnswer = () => {
-    setAnswers([...answers, uuidv4()]);
+    dispatch(
+      updateCurrentQuestion({
+        ...question,
+        type: event.target.value as QuestionTypes,
+      })
+    );
   };
 
   return (
-    <StyledQuestion id={id}>
-      <TextField
-        value={description}
-        onChange={(event) => {
-          setDescription(event.target.value);
-        }}
-        multiline
-        variant="standard"
-        defaultValue="New question"
-        sx={{ marginBottom: "20px", fontSize: "20px", minWidth: "50%" }}
+    <StyledQuestion>
+      <h3>Описание вопроса</h3>
+      <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+        <TextField
+          value={question.description}
+          onChange={(event) => {
+            dispatch(
+              updateCurrentQuestion({
+                ...question,
+                description: event.target.value,
+              })
+            );
+          }}
+          multiline
+          variant="standard"
+          placeholder="New question"
+          sx={{ marginBottom: "20px", fontSize: "20px", minWidth: "70%" }}
+        />
+        <FormControl sx={{ minWidth: "25%" }}>
+          <InputLabel sx={{ fontSize: "16px" }}>Тип</InputLabel>
+          <Select value={question.type} label="Type" onChange={handleChange}>
+            <MenuItem value={QuestionTypes.RADIO}>Один ответ</MenuItem>
+            <MenuItem value={QuestionTypes.CHECKBOX}>
+              Несколько ответов
+            </MenuItem>
+            <MenuItem value={QuestionTypes.INPUT}>Свободный ответ</MenuItem>
+          </Select>
+        </FormControl>
+      </Box>
+
+      <AnswerForm
+        type={question.type}
+        answers={question.answers}
+        questionId={question.id}
       />
-      <FormControl fullWidth>
-        <InputLabel sx={{ fontSize: "16px" }}>Тип вопроса</InputLabel>
-        <Select value={type} label="Type" onChange={handleChange}>
-          <MenuItem value={Types.RADIO}>Один ответ</MenuItem>
-          <MenuItem value={Types.CHECKBOX}>Несколько ответов</MenuItem>
-          <MenuItem value={Types.INPUT}>Свободный ответ</MenuItem>
-        </Select>
-      </FormControl>
-      <div>
-        {type === Types.INPUT ? (
-          <>
-            <Button onClick={() => saveQuestion()}>Save question</Button>
-            <AnswerForm type={type} answers={answers} />
-          </>
-        ) : (
-          <>
-            <AnswerForm type={type} answers={answers} />
-            <Button onClick={() => saveQuestion()}>Save question</Button>
-            <Button onClick={() => addAnswer()}>Add answer</Button>
-          </>
-        )}
-      </div>
+      <IconButton onClick={
+        ()=> {
+          dispatch(deleteCurrentQuestion(question.id))
+        }
+      }>
+        <DeleteForeverIcon/>
+      </IconButton>
     </StyledQuestion>
   );
 };

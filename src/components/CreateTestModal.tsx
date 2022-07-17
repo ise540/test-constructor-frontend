@@ -24,10 +24,11 @@ export const CreateTestModal: FC<CreateTestModalProps> = ({
 
 
   const addTest = (title: string, userId: string) => {
+    const id= uuidv4() 
     dispatch(
-      createCurrentTest({ title, authorId: userId, id: uuidv4(), questions: [] })
+      createCurrentTest({ title, authorId: userId, id, questions: [] })
     );
-    navigate("new-test");
+    navigate(`new-test/${id}`);
   };
 
   return (

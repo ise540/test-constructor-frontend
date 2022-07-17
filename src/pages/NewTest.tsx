@@ -1,31 +1,41 @@
 import { Button } from "@mui/material";
-import {  useState } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
-import { v4 as uuidv4 } from "uuid";
-
 import { QuestionForm } from "../components/QuestionForm";
+import { createCurrentQuestion } from "../store/currentTest/currentTestSlice";
+import { useParams } from "react-router";
+import { useFetching } from "../hooks/useFetch";
+import TestService from "../services/TestService";
 
 export const NewTest = () => {
-  const [description, setDescription] = useState("");
-
-  const [questions, setQuestions] = useState<string[]>([]);
+  const { id } = useParams();
   const dispatch = useAppDispatch();
-
-  const user = useAppSelector((state) => state.user.user);
+  const questions = useAppSelector(
+    (state) => state.currentTest.currentTest.questions
+  );
+  const currentTest = useAppSelector(state => state.currentTest.currentTest)
 
   const addQuestion = () => {
-    setQuestions([...questions, uuidv4()]);
+    if (id) dispatch(createCurrentQuestion(id));
   };
+
+  const [createTest, isLoading, error] = useFetching(async ()=> {await TestService.createTest(currentTest)})
+
+  const saveTest = async () => {
+    createTest()
+  } 
 
   return (
     <div>
       <div>
-        {questions.map((item) => {
-          return <QuestionForm id={item} />;
+        {questions.map((item, index) => {
+          return <QuestionForm key={index} question={item} />;
         })}
       </div>
 
       <Button onClick={() => addQuestion()}>Добавить вопрос</Button>
+      <Button onClick={() => saveTest()}>Сохранить вопрос</Button>
+      <div>{isLoading?"Загрузка":""}</div>
+      <div>{error}</div>
     </div>
   );
 };

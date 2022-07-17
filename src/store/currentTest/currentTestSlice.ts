@@ -1,21 +1,22 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IAnswer } from "../../models/IAnswer";
-import { IPartialTest } from "../../models/IPartialTest";
 import { IQuestion } from "../../models/IQuestion";
 import { ITest } from "../../models/ITest";
+import { v4 as uuidv4 } from "uuid";
+import { QuestionTypes } from "../../types/QuestionTypes";
 
 interface CurrentTestState {
-  currentTest: IPartialTest;
+  currentTest: ITest;
 }
 
 const initialState: CurrentTestState = {
   currentTest: {
     id: "",
+    title: "",
+    authorId: "",
     questions: [],
   },
 };
-
-
 
 export const currentTestSlice = createSlice({
   name: "currentTest",
@@ -25,8 +26,15 @@ export const currentTestSlice = createSlice({
       state.currentTest = action.payload;
     },
 
-    createCurrentQuestion(state, action: PayloadAction<IQuestion>) {
-      state.currentTest.questions.push(action.payload);
+    createCurrentQuestion(state, action: PayloadAction<string>) {
+      state.currentTest.questions.push({
+        id: uuidv4(),
+        description: "",
+        type: QuestionTypes.RADIO,
+        order: 1,
+        testId: action.payload,
+        answers: []
+      });
     },
 
     updateCurrentQuestion(state, action: PayloadAction<IQuestion>) {
@@ -36,21 +44,24 @@ export const currentTestSlice = createSlice({
       state.currentTest.questions[currentQuestionIndex] = action.payload;
     },
 
-    deleteCurrentQuestion(state, action: PayloadAction<IQuestion>) {
+    deleteCurrentQuestion(state, action: PayloadAction<string>) {
       const currentQuestionIndex = state.currentTest.questions.findIndex(
-        (item) => item.id === action.payload.id
+        (item) => item.id === action.payload
       );
       state.currentTest.questions.splice(currentQuestionIndex, 1);
     },
 
-    createCurrentAnswer(state, action: PayloadAction<IAnswer>) {
+    createCurrentAnswer(state, action: PayloadAction<string>) {
       const currentQuestionIndex = state.currentTest.questions.findIndex(
-        (item) => item.id === action.payload.questionId
+        (item) => item.id === action.payload
       );
 
-      state.currentTest.questions[currentQuestionIndex].answers.push(
-        action.payload
-      );
+      state.currentTest.questions[currentQuestionIndex].answers.push({
+        id: uuidv4(),
+        questionId: action.payload,
+        correct: false,
+        value: "",
+      });
     },
 
     updateCurrentAnswer(state, action: PayloadAction<IAnswer>) {
@@ -66,13 +77,30 @@ export const currentTestSlice = createSlice({
       ] = action.payload;
     },
 
-    deleteCurrentAnswer(state, action: PayloadAction<IAnswer>) {
+    setCorrectCurrentAnswer(
+      state,
+      action: PayloadAction<{ answerId: string; questionId: string }>
+    ) {
+      state.currentTest.questions
+        .find((question) => question.id === action.payload.questionId)!
+        .answers.forEach((answer) => {
+          answer.correct = false;
+        });
+
+      state.currentTest.questions
+        .find((question) => question.id === action.payload.questionId)!
+        .answers.find(
+          (answer) => answer.id === action.payload.answerId
+        )!.correct = true;
+    },
+
+    deleteCurrentAnswer(state, action: PayloadAction<{answerId:string, questionId: string}>) {
       const currentQuestionIndex = state.currentTest.questions.findIndex(
         (item) => item.id === action.payload.questionId
       );
       const currentAnswerIndex = state.currentTest.questions[
         currentQuestionIndex
-      ].answers.findIndex((item) => item.id === action.payload.id);
+      ].answers.findIndex((item) => item.id === action.payload.answerId);
 
       state.currentTest.questions[currentQuestionIndex].answers.splice(
         currentAnswerIndex,
@@ -90,5 +118,6 @@ export const {
   updateCurrentQuestion,
   deleteCurrentAnswer,
   deleteCurrentQuestion,
+  setCorrectCurrentAnswer,
 } = currentTestSlice.actions;
 export default currentTestSlice.reducer;

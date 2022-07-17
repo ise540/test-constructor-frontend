@@ -27,7 +27,9 @@ export const AppRouter = () => {
             <Route path="profile" element={<Profile />} />
             <Route path="completed-tests" element={<CompletedTests />} />
             <Route path="my-tests" element={<MyTests />} />
-            <Route path="my-tests/new-test" element={<NewTest />} />
+            <Route path="my-tests/:id" element={<NewTest />} />
+            <Route path="my-tests/new-test/:id" element={<NewTest />} />
+            
           </>
         )}
       </Route>

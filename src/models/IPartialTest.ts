@@ -1,7 +1,7 @@
 import { IQuestion } from "./IQuestion";
 
 export interface IPartialTest {
-    title?: string;
+    title: string;
     id: string;
     authorId?: string;
     questions: IQuestion[];
