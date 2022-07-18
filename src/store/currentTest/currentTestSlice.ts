@@ -26,6 +26,23 @@ export const currentTestSlice = createSlice({
       state.currentTest = action.payload;
     },
 
+    setCurrentTest(state, action: PayloadAction<ITest>) {
+      state.currentTest = action.payload;
+    },
+
+    emptyCurrentTest(state) {
+      state.currentTest = {
+        id: "",
+        title: "",
+        authorId: "",
+        questions: [],
+      };
+    },
+
+    updateCurrentTest(state, action: PayloadAction<string>) {
+      state.currentTest.title = action.payload;
+    },
+
     createCurrentQuestion(state, action: PayloadAction<string>) {
       state.currentTest.questions.push({
         id: uuidv4(),
@@ -33,7 +50,7 @@ export const currentTestSlice = createSlice({
         type: QuestionTypes.RADIO,
         order: 1,
         testId: action.payload,
-        answers: []
+        answers: [],
       });
     },
 
@@ -94,7 +111,10 @@ export const currentTestSlice = createSlice({
         )!.correct = true;
     },
 
-    deleteCurrentAnswer(state, action: PayloadAction<{answerId:string, questionId: string}>) {
+    deleteCurrentAnswer(
+      state,
+      action: PayloadAction<{ answerId: string; questionId: string }>
+    ) {
       const currentQuestionIndex = state.currentTest.questions.findIndex(
         (item) => item.id === action.payload.questionId
       );
@@ -119,5 +139,8 @@ export const {
   deleteCurrentAnswer,
   deleteCurrentQuestion,
   setCorrectCurrentAnswer,
+  emptyCurrentTest,
+  setCurrentTest,
+  updateCurrentTest
 } = currentTestSlice.actions;
 export default currentTestSlice.reducer;

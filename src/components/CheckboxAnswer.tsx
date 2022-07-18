@@ -2,8 +2,7 @@ import {
   Checkbox,
   FormControlLabel,
   Input,
-  IconButton,
-  Icon,
+  IconButton
 } from "@mui/material";
 import { FC } from "react";
 import { useAppDispatch } from "../hooks/redux";

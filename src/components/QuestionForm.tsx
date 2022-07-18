@@ -37,7 +37,7 @@ export const QuestionForm: FC<QuestionFormProps> = ({ question }) => {
     dispatch(
       updateCurrentQuestion({
         ...question,
-        type: event.target.value as QuestionTypes,
+        type: event.target.value as QuestionTypes
       })
     );
   };

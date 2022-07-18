@@ -15,9 +15,12 @@ export const testsSlice = createSlice({
   name: "tests",
   initialState,
   reducers: {
-    createTest(state, action: PayloadAction<ITest>) {
-      state.tests.push(action.payload);
+    setTests(state, action: PayloadAction<ITest[]>) {
+      state.tests = [];
+      action.payload.forEach(test=> state.tests.push(test));
     },
+
+
     updateTest(state, action: PayloadAction<ITest>) {
       const currentTestIndex = state.tests.findIndex(
         (item) => item.id === action.payload.id
@@ -122,7 +125,7 @@ export const testsSlice = createSlice({
 });
 
 export const {
-  createTest,
+  setTests,
   createQuestion,
   createAnswer,
   updateAnswer,

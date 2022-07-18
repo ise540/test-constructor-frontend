@@ -3,7 +3,6 @@ import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { QuestionForm } from "../components/QuestionForm";
 import {
   createCurrentQuestion,
-  emptyCurrentTest,
   updateCurrentTest,
 } from "../store/currentTest/currentTestSlice";
 import { useParams } from "react-router";
@@ -12,26 +11,28 @@ import TestService from "../services/TestService";
 import { useState } from "react";
 import { ITest } from "../models/ITest";
 
-export const NewTest = () => {
+export const EditTest = () => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
+  const questions = useAppSelector(
+    (state) => state.currentTest.currentTest.questions
+  );
   const currentTest = useAppSelector((state) => state.currentTest.currentTest);
   const [order, setOrder] = useState(1);
 
   const addQuestion = () => {
-    if (id) {
-      dispatch(createCurrentQuestion(id));
-      setOrder(order + 1);
-    }
+    if (id) dispatch(createCurrentQuestion(id));
+    setOrder(order + 1);
   };
 
-  const [createTest, isLoading, error] = useFetching(async (test:ITest) => {
-    console.log(test)
-    await TestService.createTest(test);
+  const [updateTest, isLoading, error] = useFetching(async (test: ITest) => {
+    console.log(test);
+    const response = await TestService.updateTest(test);
+    console.log("update response", response.data)
   });
 
   const saveTest = async () => {
-    createTest(currentTest);
+    updateTest(currentTest);
   };
 
   return (
@@ -44,12 +45,13 @@ export const NewTest = () => {
         }}
       />
       <div>
-        {currentTest.questions.map((item, index) => {
+        {questions.map((item, index) => {
           return <QuestionForm key={index} question={item} />;
         })}
       </div>
+
       <Button onClick={() => addQuestion()}>Добавить вопрос</Button>
-      <Button onClick={() => saveTest()}>Сохранить новый тест</Button>
+      <Button onClick={() => saveTest()}>Сохранить изменения</Button>
       <div>{isLoading ? "Загрузка" : ""}</div>
       <div>{error}</div>
     </div>

@@ -10,4 +10,8 @@ export default class TestService {
     static async createTest(data:ITest) {
         return $api.post<ITest>("/test", data);
     }
+
+    static async updateTest(data:ITest) {
+        return $api.put<ITest>("/test", data);
+    }
 }
