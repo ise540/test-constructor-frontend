@@ -14,4 +14,8 @@ export default class TestService {
     static async updateTest(data:ITest) {
         return $api.put<ITest>("/test", data);
     }
+
+    static async deleteTest(data:string) {
+        return $api.delete<ITest>(`/test/${data}`);
+    }
 }

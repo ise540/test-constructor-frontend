@@ -27,9 +27,9 @@ export const testsSlice = createSlice({
       );
       state.tests[currentTestIndex] = action.payload;
     },
-    deleteTest(state, action: PayloadAction<ITest>) {
+    removeTest(state, action: PayloadAction<string>) {
       const currentTestIndex = state.tests.findIndex(
-        (item) => item.id === action.payload.id
+        (item) => item.id === action.payload
       );
       state.tests.splice(currentTestIndex, 1);
     },
@@ -133,6 +133,6 @@ export const {
   updateTest,
   deleteAnswer,
   deleteQuestion,
-  deleteTest,
+  removeTest,
 } = testsSlice.actions;
 export default testsSlice.reducer;

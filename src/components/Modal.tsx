@@ -12,8 +12,8 @@ const StyledBox = styled(Box)`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 400px;
-  height: 200px;
+  width: 500px;
+  height: 300px;
   border: 2px solid #000;
   box-shadow: 24;
   padding: 20;

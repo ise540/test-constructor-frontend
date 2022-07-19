@@ -26,7 +26,6 @@ export const EditTest = () => {
   };
 
   const [updateTest, isLoading, error] = useFetching(async (test: ITest) => {
-    console.log(test);
     const response = await TestService.updateTest(test);
     console.log("update response", response.data)
   });

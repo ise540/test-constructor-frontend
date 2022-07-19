@@ -26,7 +26,6 @@ export const NewTest = () => {
   };
 
   const [createTest, isLoading, error] = useFetching(async (test:ITest) => {
-    console.log(test)
     await TestService.createTest(test);
   });
 
