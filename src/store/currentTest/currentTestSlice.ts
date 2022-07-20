@@ -48,7 +48,7 @@ export const currentTestSlice = createSlice({
         id: uuidv4(),
         description: "",
         type: QuestionTypes.RADIO,
-        order: 1,
+        order: state.currentTest.questions.length + 1,
         testId: action.payload,
         answers: [],
       });
@@ -60,12 +60,46 @@ export const currentTestSlice = createSlice({
       );
       state.currentTest.questions[currentQuestionIndex] = action.payload;
     },
+    swapCurrentQuestionsOrder(
+      state,
+      action: PayloadAction<{
+        firstQuestionId: string;
+        secondQuestionId: string;
+      }>
+    ) {
+      const firstQuestionIndex = state.currentTest.questions.findIndex(
+        (item) => item.id === action.payload.firstQuestionId
+      );
+      const secondQuestionIndex = state.currentTest.questions.findIndex(
+        (item) => item.id === action.payload.secondQuestionId
+      );
+      let buffer = state.currentTest.questions[firstQuestionIndex].order;
+      state.currentTest.questions[firstQuestionIndex].order = state.currentTest.questions[secondQuestionIndex].order;
+      state.currentTest.questions[secondQuestionIndex].order = buffer;
+
+
+      [
+        state.currentTest.questions[firstQuestionIndex],
+        state.currentTest.questions[secondQuestionIndex],
+      ] = [
+        state.currentTest.questions[secondQuestionIndex],
+        state.currentTest.questions[firstQuestionIndex],
+      ];
+    },
 
     deleteCurrentQuestion(state, action: PayloadAction<string>) {
       const currentQuestionIndex = state.currentTest.questions.findIndex(
         (item) => item.id === action.payload
       );
       state.currentTest.questions.splice(currentQuestionIndex, 1);
+
+      for (
+        let index = 1;
+        index <= state.currentTest.questions.length;
+        index++
+      ) {
+        state.currentTest.questions[index - 1].order = index;
+      }
     },
 
     createCurrentAnswer(state, action: PayloadAction<string>) {
@@ -141,6 +175,7 @@ export const {
   setCorrectCurrentAnswer,
   emptyCurrentTest,
   setCurrentTest,
-  updateCurrentTest
+  updateCurrentTest,
+  swapCurrentQuestionsOrder
 } = currentTestSlice.actions;
 export default currentTestSlice.reducer;

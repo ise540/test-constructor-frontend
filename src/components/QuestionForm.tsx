@@ -13,13 +13,18 @@ import styled from "styled-components";
 import { AnswerForm } from "./AnswerForm";
 import { QuestionTypes } from "../types/QuestionTypes";
 import { useAppDispatch } from "../hooks/redux";
-import { deleteCurrentQuestion, updateCurrentQuestion } from "../store/currentTest/currentTestSlice";
+import {
+  deleteCurrentQuestion,
+  updateCurrentQuestion,
+} from "../store/currentTest/currentTestSlice";
 import { Box } from "@mui/system";
 import { IQuestion } from "../models/IQuestion";
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
 interface QuestionFormProps {
   question: IQuestion;
+  onDragStart: (e:any)=>void;
+  onDrop: (e:any) => void; 
 }
 
 const StyledQuestion = styled(Paper)`
@@ -30,21 +35,28 @@ const StyledQuestion = styled(Paper)`
   padding: 10px;
 `;
 
-export const QuestionForm: FC<QuestionFormProps> = ({ question }) => {
+export const QuestionForm: FC<QuestionFormProps> = ({ question, onDragStart, onDrop }) => {
   const dispatch = useAppDispatch();
 
   const handleChange = (event: SelectChangeEvent) => {
     dispatch(
       updateCurrentQuestion({
         ...question,
-        type: event.target.value as QuestionTypes
+        type: event.target.value as QuestionTypes,
       })
     );
   };
 
   return (
-    <StyledQuestion>
-      <h3>Описание вопроса</h3>
+    <StyledQuestion
+      draggable={true}
+      onDragStart={onDragStart}
+      onDragOver={(e) => e.preventDefault()}
+      onDragEnter={(e) => e.preventDefault()}
+      onDragLeave={(e) => e.preventDefault()}
+      onDrop = {onDrop}
+    >
+      <h3>{`Вопрос №${question.order}`}</h3>
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
         <TextField
           value={question.description}
@@ -78,12 +90,12 @@ export const QuestionForm: FC<QuestionFormProps> = ({ question }) => {
         answers={question.answers}
         questionId={question.id}
       />
-      <IconButton onClick={
-        ()=> {
-          dispatch(deleteCurrentQuestion(question.id))
-        }
-      }>
-        <DeleteForeverIcon/>
+      <IconButton
+        onClick={() => {
+          dispatch(deleteCurrentQuestion(question.id));
+        }}
+      >
+        <DeleteForeverIcon />
       </IconButton>
     </StyledQuestion>
   );

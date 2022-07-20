@@ -4,28 +4,27 @@ import { QuestionForm } from "../components/QuestionForm";
 import {
   createCurrentQuestion,
   emptyCurrentTest,
+  swapCurrentQuestionsOrder,
   updateCurrentTest,
 } from "../store/currentTest/currentTestSlice";
 import { useParams } from "react-router";
 import { useFetching } from "../hooks/useFetch";
 import TestService from "../services/TestService";
-import { useState } from "react";
+
 import { ITest } from "../models/ITest";
 
 export const NewTest = () => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
   const currentTest = useAppSelector((state) => state.currentTest.currentTest);
-  const [order, setOrder] = useState(1);
 
   const addQuestion = () => {
     if (id) {
       dispatch(createCurrentQuestion(id));
-      setOrder(order + 1);
     }
   };
 
-  const [createTest, isLoading, error] = useFetching(async (test:ITest) => {
+  const [createTest, isLoading, error] = useFetching(async (test: ITest) => {
     await TestService.createTest(test);
   });
 
@@ -44,7 +43,25 @@ export const NewTest = () => {
       />
       <div>
         {currentTest.questions.map((item, index) => {
-          return <QuestionForm key={index} question={item} />;
+          return (
+            <QuestionForm
+              key={index}
+              question={item}
+              onDragStart={(e) => {
+                e.dataTransfer.setData("draggedQuestionId", item.id);
+              }}
+              onDrop={(e) => {
+                let draggedQuestion =
+                  e.dataTransfer.getData("draggedQuestionId");
+                dispatch(
+                  swapCurrentQuestionsOrder({
+                    firstQuestionId: draggedQuestion,
+                    secondQuestionId: item.id,
+                  })
+                );
+              }}
+            />
+          );
         })}
       </div>
       <Button onClick={() => addQuestion()}>Добавить вопрос</Button>

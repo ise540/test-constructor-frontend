@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { QuestionForm } from "../components/QuestionForm";
 import {
   createCurrentQuestion,
+  swapCurrentQuestionsOrder,
   updateCurrentTest,
 } from "../store/currentTest/currentTestSlice";
 import { useParams } from "react-router";
@@ -26,8 +27,7 @@ export const EditTest = () => {
   };
 
   const [updateTest, isLoading, error] = useFetching(async (test: ITest) => {
-    const response = await TestService.updateTest(test);
-    console.log("update response", response.data)
+    await TestService.updateTest(test);
   });
 
   const saveTest = async () => {
@@ -45,7 +45,25 @@ export const EditTest = () => {
       />
       <div>
         {questions.map((item, index) => {
-          return <QuestionForm key={index} question={item} />;
+          return (
+            <QuestionForm
+              key={index}
+              question={item}
+              onDragStart={(e) => {
+                e.dataTransfer.setData("draggedQuestionId", item.id);
+              }}
+              onDrop={(e) => {
+                let draggedQuestion =
+                  e.dataTransfer.getData("draggedQuestionId");
+                dispatch(
+                  swapCurrentQuestionsOrder({
+                    firstQuestionId: draggedQuestion,
+                    secondQuestionId: item.id,
+                  })
+                );
+              }}
+            />
+          );
         })}
       </div>
 
