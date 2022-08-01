@@ -4,9 +4,6 @@ import { BrowserRouter } from "react-router-dom";
 import { createGlobalStyle } from "styled-components";
 import { Provider } from "react-redux";
 import { setupStore } from "./store/store";
-import $api from "./api";
-import AuthService from "./services/AuthService";
-import { fetchRefreshSuccess } from "./store/auth/userSlice";
 
 const Global = createGlobalStyle`
   *{
@@ -22,8 +19,6 @@ const store = setupStore();
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
-
-
 
 root.render(
   <Provider store={store}>

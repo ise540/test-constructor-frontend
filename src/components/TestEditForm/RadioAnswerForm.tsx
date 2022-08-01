@@ -1,19 +1,19 @@
 import { FormControlLabel, IconButton, Input, Radio } from "@mui/material";
 import { FC } from "react";
-import { useAppDispatch } from "../hooks/redux";
-import { IAnswer } from "../models/IAnswer";
+import { useAppDispatch } from "../../hooks/redux";
+import { IAnswer } from "../../models/IAnswer";
 import {
   deleteCurrentAnswer,
   setCorrectCurrentAnswer,
   updateCurrentAnswer,
-} from "../store/currentTest/currentTestSlice";
+} from "../../store/currentTest/currentTestSlice";
 import ClearIcon from "@mui/icons-material/Clear";
 
-interface RadioAnswerProps {
+interface RadioAnswerFormProps {
   answer: IAnswer;
 }
 
-export const RadioAnswer: FC<RadioAnswerProps> = ({ answer }) => {
+export const RadioAnswerForm: FC<RadioAnswerFormProps> = ({ answer }) => {
   const dispatch = useAppDispatch();
 
   return (
@@ -49,6 +49,7 @@ export const RadioAnswer: FC<RadioAnswerProps> = ({ answer }) => {
         }}
       />
       <IconButton
+        color="error"
         onClick={() => {
           dispatch(
             deleteCurrentAnswer({

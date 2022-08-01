@@ -4,6 +4,7 @@ import styled from "styled-components";
 import {  useAppSelector } from "../hooks/redux";
 import { NavButton } from "./Button";
 import { DropdownMenuButton } from "./DropdownMenuButton";
+import { Logo } from "./Logo";
 
 interface HeaderProps {}
 
@@ -11,7 +12,7 @@ const StyledHeader = styled.nav<HeaderProps>`
   width: 100%;
   background-color: #b3b3b3;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
 `
 
 export const Header: FC<HeaderProps> = () => {
@@ -27,8 +28,13 @@ export const Header: FC<HeaderProps> = () => {
     navigate("/login", { replace: true });
   };
 
+  const navToMain = () => {
+    navigate("/", { replace: true });
+  };
+
   return (
     <StyledHeader>
+      <Logo onClick={navToMain}/>
       {!isAuth ? (
         <>
           <NavButton onClick={navToRegistration}>Регистрация</NavButton>

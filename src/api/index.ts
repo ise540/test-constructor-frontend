@@ -29,15 +29,18 @@ $api.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
     console.log(error.response.status);
-    if (error.response.status === 401 && originalRequest && !error.config._isRetry) {
+    if (
+      error.response.status === 401 &&
+      originalRequest &&
+      !error.config._isRetry
+    ) {
       try {
         const response = await AuthService.refresh();
-        localStorage.setItem('accessToken', response.data.accessToken)
-        error.config._isRetry = true
-        $api.request(originalRequest);
-        
+        localStorage.setItem("accessToken", response.data.accessToken);
+        error.config._isRetry = true;
+        return $api.request(originalRequest);
       } catch (e) {
-        console.log(e)
+        console.log(e);
       }
     }
     throw error;
@@ -50,7 +53,5 @@ $api.interceptors.request.use((config) => {
 
   return config;
 });
-
-
 
 export default $api;

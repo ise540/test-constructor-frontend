@@ -8,8 +8,8 @@ import { IconButton } from "@mui/material";
 const StyledBox = styled(Box)`
   position: absolute;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  justify-content: space-between;
+  align-items: space-evenly;
   flex-direction: column;
   top: 50%;
   left: 50%;

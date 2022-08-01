@@ -1,20 +1,18 @@
-import {
-  Checkbox,
-  FormControlLabel,
-  Input,
-  IconButton
-} from "@mui/material";
+import { Checkbox, FormControlLabel, Input, IconButton } from "@mui/material";
 import { FC } from "react";
-import { useAppDispatch } from "../hooks/redux";
-import { IAnswer } from "../models/IAnswer";
-import { deleteCurrentAnswer, updateCurrentAnswer } from "../store/currentTest/currentTestSlice";
+import { useAppDispatch } from "../../hooks/redux";
+import { IAnswer } from "../../models/IAnswer";
+import {
+  deleteCurrentAnswer,
+  updateCurrentAnswer,
+} from "../../store/currentTest/currentTestSlice";
 import ClearIcon from "@mui/icons-material/Clear";
 
-interface CheckboxAnswerProps {
+interface CheckboxAnswerFormProps {
   answer: IAnswer;
 }
 
-export const CheckboxAnswer: FC<CheckboxAnswerProps> = ({ answer }) => {
+export const CheckboxAnswerForm: FC<CheckboxAnswerFormProps> = ({ answer }) => {
   const dispatch = useAppDispatch();
 
   return (
@@ -52,8 +50,14 @@ export const CheckboxAnswer: FC<CheckboxAnswerProps> = ({ answer }) => {
         }}
       />
       <IconButton
+        color="error"
         onClick={() => {
-          dispatch(deleteCurrentAnswer({answerId: answer.id, questionId: answer.questionId}));
+          dispatch(
+            deleteCurrentAnswer({
+              answerId: answer.id,
+              questionId: answer.questionId,
+            })
+          );
         }}
       >
         <ClearIcon />

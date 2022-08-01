@@ -1,12 +1,12 @@
 import { RadioGroup, FormGroup, Button } from "@mui/material";
 import { FC, useCallback, useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "../hooks/redux";
-import { IAnswer } from "../models/IAnswer";
-import { createCurrentAnswer } from "../store/currentTest/currentTestSlice";
-import { QuestionTypes } from "../types/QuestionTypes";
-import { RadioAnswer } from "./RadioAnswer";
-import { CheckboxAnswer } from "./CheckboxAnswer";
-import { InputAnswer } from "./InputAnswer";
+import { useAppDispatch, useAppSelector } from "../../hooks/redux";
+import { IAnswer } from "../../models/IAnswer";
+import { createCurrentAnswer } from "../../store/currentTest/currentTestSlice";
+import { QuestionTypes } from "../../types/QuestionTypes";
+import { RadioAnswerForm } from "./RadioAnswerForm";
+import { CheckboxAnswerForm } from "./CheckboxAnswerForm";
+import { InputAnswerForm } from "./InputAnswerForm";
 
 interface AnswerFormProps {
   type: QuestionTypes;
@@ -35,23 +35,26 @@ export const AnswerForm: FC<AnswerFormProps> = ({ type, questionId }) => {
     return (
       <FormGroup>
         {currentAnswers.map((item) => {
-          return <CheckboxAnswer key={item.id} answer={item} />;
+          return <CheckboxAnswerForm key={item.id} answer={item} />;
         })}
-        <Button onClick={() => addAnswer()}>Add answer</Button>
+        <Button onClick={() => addAnswer()}>Добавить ответ</Button>
       </FormGroup>
     );
   } else if (type === QuestionTypes.RADIO && currentAnswers) {
     return (
-      <RadioGroup>
-        {currentAnswers.map((item) => {
-          return <RadioAnswer key={item.id} answer={item} />;
-        })}
-        <Button onClick={() => addAnswer()}>Add answer</Button>
-      </RadioGroup>
+      <>
+        <b>Ответы</b>
+        <RadioGroup>
+          {currentAnswers.map((item) => {
+            return <RadioAnswerForm key={item.id} answer={item} />;
+          })}
+          <Button onClick={() => addAnswer()}>Добавить ответ</Button>
+        </RadioGroup>
+      </>
     );
   } else {
     return currentAnswers?.length ? (
-      <InputAnswer answer={currentAnswers[0]} />
+      <InputAnswerForm answer={currentAnswers[0]} />
     ) : (
       <div>No answers</div>
     );

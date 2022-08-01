@@ -2,7 +2,8 @@
 import { useEffect, useState } from "react";
 import { NavButton } from "../components/Button";
 import { CreateTestModal } from "../components/CreateTestModal";
-import { TestTable } from "../components/TestTable";
+import { Loader } from "../components/Loader";
+import { UserTestTable } from "../components/UserTestTable";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { useFetching } from "../hooks/useFetch";
 import TestService from "../services/TestService";
@@ -16,6 +17,7 @@ export const MyTests = () => {
   const [testFetching, isTestLoading, testError] = useFetching(async () => {
     const response = await TestService.getAll();
     dispatch(setTests(response.data));
+    console.log("data response",response)
   });
 
   useEffect(() => {
@@ -25,7 +27,7 @@ export const MyTests = () => {
   return (
     <div>
       <h1>My tests</h1>
-      {isTestLoading ? <div>Загрузка...</div> : <TestTable tests={tests} />}
+      {isTestLoading ? <Loader/> : <UserTestTable tests={tests} />}
       <NavButton onClick={() => setOpen(true)}>Create new test</NavButton>
       <CreateTestModal open={isOpen} setOpen={setOpen} />
     </div>

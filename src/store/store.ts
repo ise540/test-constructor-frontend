@@ -3,8 +3,14 @@ import { load, save } from "redux-localstorage-simple";
 import userReducer from "./auth/userSlice";
 import currentTestReducer from "./currentTest/currentTestSlice";
 import testsReducer from "./tests/testsSlice";
+import answersReducer from "./answers/answerSlice";
 
-const rootReducer = combineReducers({ user: userReducer, tests: testsReducer ,currentTest: currentTestReducer });
+const rootReducer = combineReducers({
+  user: userReducer,
+  tests: testsReducer,
+  currentTest: currentTestReducer,
+  answers: answersReducer,
+});
 
 export const setupStore = () => {
   return configureStore({

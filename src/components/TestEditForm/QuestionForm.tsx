@@ -11,14 +11,14 @@ import {
 import { FC } from "react";
 import styled from "styled-components";
 import { AnswerForm } from "./AnswerForm";
-import { QuestionTypes } from "../types/QuestionTypes";
-import { useAppDispatch } from "../hooks/redux";
+import { QuestionTypes } from "../../types/QuestionTypes";
+import { useAppDispatch } from "../../hooks/redux";
 import {
   deleteCurrentQuestion,
   updateCurrentQuestion,
-} from "../store/currentTest/currentTestSlice";
+} from "../../store/currentTest/currentTestSlice";
 import { Box } from "@mui/system";
-import { IQuestion } from "../models/IQuestion";
+import { IQuestion } from "../../models/IQuestion";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
 interface QuestionFormProps {
@@ -28,11 +28,11 @@ interface QuestionFormProps {
 }
 
 const StyledQuestion = styled(Paper)`
-  max-width: 80%;
   min-height: 50px;
-  margin: 5px;
+  margin: 10px auto;
   border: 2px solid black;
   padding: 10px;
+  position:relative;
 `;
 
 export const QuestionForm: FC<QuestionFormProps> = ({ question, onDragStart, onDrop }) => {
@@ -56,8 +56,10 @@ export const QuestionForm: FC<QuestionFormProps> = ({ question, onDragStart, onD
       onDragLeave={(e) => e.preventDefault()}
       onDrop = {onDrop}
     >
-      <h3>{`Вопрос №${question.order}`}</h3>
+      <h2>{`Вопрос №${question.order}`}</h2>
+      <h4>Описание</h4>
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+        
         <TextField
           value={question.description}
           onChange={(event) => {
@@ -91,6 +93,8 @@ export const QuestionForm: FC<QuestionFormProps> = ({ question, onDragStart, onD
         questionId={question.id}
       />
       <IconButton
+      sx={{position:"absolute", top:0, right:0}}
+      color="error"
         onClick={() => {
           dispatch(deleteCurrentQuestion(question.id));
         }}

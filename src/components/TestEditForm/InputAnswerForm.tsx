@@ -1,14 +1,14 @@
 import { Input } from "@mui/material";
 import { FC } from "react";
-import { useAppDispatch } from "../hooks/redux";
-import { IAnswer } from "../models/IAnswer";
-import { updateCurrentAnswer } from "../store/currentTest/currentTestSlice";
+import { useAppDispatch } from "../../hooks/redux";
+import { IAnswer } from "../../models/IAnswer";
+import { updateCurrentAnswer } from "../../store/currentTest/currentTestSlice";
 
-interface InputAnswerProps {
+interface InputAnswerFormProps {
   answer: IAnswer;
 }
 
-export const InputAnswer: FC<InputAnswerProps> = ({ answer }) => {
+export const InputAnswerForm: FC<InputAnswerFormProps> = ({ answer }) => {
   const dispatch = useAppDispatch();
 
   return (

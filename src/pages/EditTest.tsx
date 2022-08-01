@@ -1,16 +1,26 @@
-import { Button, Input } from "@mui/material";
+import { Button, Input, Paper } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
-import { QuestionForm } from "../components/QuestionForm";
+import { QuestionForm } from "../components/TestEditForm/QuestionForm";
 import {
   createCurrentQuestion,
   swapCurrentQuestionsOrder,
   updateCurrentTest,
 } from "../store/currentTest/currentTestSlice";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { useFetching } from "../hooks/useFetch";
 import TestService from "../services/TestService";
 import { useState } from "react";
 import { ITest } from "../models/ITest";
+import styled from "styled-components";
+
+const StyledPage = styled(Paper)`
+  padding: 10px 30px;
+`;
+
+const StyledDiv = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
 
 export const EditTest = () => {
   const { id } = useParams();
@@ -18,6 +28,7 @@ export const EditTest = () => {
   const questions = useAppSelector(
     (state) => state.currentTest.currentTest.questions
   );
+  const navigate = useNavigate();
   const currentTest = useAppSelector((state) => state.currentTest.currentTest);
   const [order, setOrder] = useState(1);
 
@@ -32,10 +43,11 @@ export const EditTest = () => {
 
   const saveTest = async () => {
     updateTest(currentTest);
+    navigate("/my-tests", { replace: true });
   };
 
   return (
-    <div>
+    <StyledPage>
       <h2>Название теста</h2>
       <Input
         value={currentTest.title}
@@ -66,11 +78,15 @@ export const EditTest = () => {
           );
         })}
       </div>
+      <StyledDiv>
+        <Button onClick={() => addQuestion()}>Добавить вопрос</Button>
+        <Button color="success" variant="contained" onClick={() => saveTest()}>
+          Сохранить изменения
+        </Button>
+      </StyledDiv>
 
-      <Button onClick={() => addQuestion()}>Добавить вопрос</Button>
-      <Button onClick={() => saveTest()}>Сохранить изменения</Button>
       <div>{isLoading ? "Загрузка" : ""}</div>
       <div>{error}</div>
-    </div>
+    </StyledPage>
   );
 };

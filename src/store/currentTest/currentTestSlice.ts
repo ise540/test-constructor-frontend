@@ -74,17 +74,11 @@ export const currentTestSlice = createSlice({
         (item) => item.id === action.payload.secondQuestionId
       );
       let buffer = state.currentTest.questions[firstQuestionIndex].order;
-      state.currentTest.questions[firstQuestionIndex].order = state.currentTest.questions[secondQuestionIndex].order;
+      state.currentTest.questions[firstQuestionIndex].order =
+        state.currentTest.questions[secondQuestionIndex].order;
       state.currentTest.questions[secondQuestionIndex].order = buffer;
 
-
-      [
-        state.currentTest.questions[firstQuestionIndex],
-        state.currentTest.questions[secondQuestionIndex],
-      ] = [
-        state.currentTest.questions[secondQuestionIndex],
-        state.currentTest.questions[firstQuestionIndex],
-      ];
+      state.currentTest.questions.sort((a, b) => a.order - b.order);
     },
 
     deleteCurrentQuestion(state, action: PayloadAction<string>) {
@@ -176,6 +170,6 @@ export const {
   emptyCurrentTest,
   setCurrentTest,
   updateCurrentTest,
-  swapCurrentQuestionsOrder
+  swapCurrentQuestionsOrder,
 } = currentTestSlice.actions;
 export default currentTestSlice.reducer;
