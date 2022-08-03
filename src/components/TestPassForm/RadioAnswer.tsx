@@ -1,4 +1,4 @@
-import { FormControlLabel, Radio } from "@mui/material";
+import { FormControlLabel, Radio, RadioGroup } from "@mui/material";
 import { FC, useEffect, useState } from "react";
 import { useAppSelector } from "../../hooks/redux";
 import { useFetching } from "../../hooks/useFetch";
@@ -8,39 +8,55 @@ import AnswerService from "../../services/AnswerService";
 import { v4 as uuidv4 } from "uuid";
 
 interface RadioAnswerProps {
-  answer: IAnswer;
+  answers: IAnswer[];
 }
 
-export const RadioAnswer: FC<RadioAnswerProps> = ({ answer }) => {
+export const RadioAnswer: FC<RadioAnswerProps> = ({ answers }) => {
   const testId = useAppSelector((state) => state.currentTest.currentTest.id);
-  const answers = useAppSelector((state) => state.answers.answers);
-  const isChecked = !!answers.find((item) => item.answerId === answer.id);
-  const [checked, setChecked] = useState(isChecked)
+  const answersIds = answers.map((item) => item.id);
+  const selectedAnswer = useAppSelector((state) => state.answers.answers).find((answer) =>
+  answersIds.includes(answer.answerId)
+);;
+  const [radioValue, setRadioValue] = useState(
+    selectedAnswer
+      ? JSON.stringify({
+          value: selectedAnswer?.value,
+          answerId: selectedAnswer?.answerId,
+        })
+      : ""
+  );
 
   const [userAnswerFetching, isUserAnswerLoading, userAnswerError] =
     useFetching(async (userAnswer: IUserAnswer) => {
-      const response = await AnswerService.sendAnswer(answer.id, userAnswer);
-      console.log("data response", response);
+      await AnswerService.sendAnswer(userAnswer.answerId, userAnswer);
     });
 
   const sendRadioAnswer = (userAnswer: IUserAnswer) => {
     userAnswerFetching(userAnswer);
   };
 
-
   return (
-    <FormControlLabel
-      value={answer.value}
-      control={
-        <Radio
-          checked={checked}
-          onChange={() => {
-            setChecked(true)
-            sendRadioAnswer({ testId, value: answer.value, id: uuidv4(), answerId: answer.id });
-          }}
+    <RadioGroup
+      value={radioValue}
+      onChange={(event) => {
+        setRadioValue(event.target.value);
+        const currentAnswer = JSON.parse(event.target.value);
+        sendRadioAnswer({
+          testId,
+          value: currentAnswer.value,
+          id: uuidv4(),
+          answerId: currentAnswer.answerId,
+        });
+      }}
+    >
+      {answers.map((item) => (
+        <FormControlLabel
+          key={item.id}
+          value={JSON.stringify({ value: item.value, answerId: item.id })}
+          control={<Radio />}
+          label={item.value}
         />
-      }
-      label={answer.value}
-    />
+      ))}
+    </RadioGroup>
   );
 };

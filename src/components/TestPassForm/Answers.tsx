@@ -21,15 +21,7 @@ export const Answers: FC<AnswersProps> = ({ answers, questionType }) => {
       </FormGroup>
     );
   } else if (questionType === QuestionTypes.RADIO) {
-
-    return (
-      <RadioGroup
-      >
-        {answers.map((item) => (
-          <RadioAnswer key={item.id} answer={item} />
-        ))}
-      </RadioGroup>
-    );
+    return <RadioAnswer answers={answers} />;
   } else {
     return <InputAnswer answer={answers[0]} />;
   }

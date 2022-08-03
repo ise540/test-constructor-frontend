@@ -14,7 +14,7 @@ interface InputAnswerProps {
 export const InputAnswer: FC<InputAnswerProps> = ({ answer }) => {
   const testId = useAppSelector((state) => state.currentTest.currentTest.id);
   const answers = useAppSelector((state) => state.answers.answers);
-  const value = answers.find(item => item.answerId === answer.id)!.value;
+  const value = answers.find(item => item.answerId === answer.id)?.value ?? "";
   const [inputValue, setValue] = useState(value)
 
   const [userAnswerFetching, isUserAnswerLoading, userAnswerError] =
