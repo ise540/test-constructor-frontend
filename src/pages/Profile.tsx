@@ -1,17 +1,17 @@
 import styled from "styled-components";
+import { Form } from "../components/Form";
 import { useAppSelector } from "../hooks/redux";
 
-const StyledProfile = styled.div``;
 
 export const Profile = () => {
   const user = useAppSelector((state) => state.user.user);
   return (
-    <StyledProfile>
+    <Form header={"Профиль"}>
       <h1>{user?.email}</h1>
       <h3>
-        {user?.isActivated ? "Аккаунт не активирован" : "Аккаунт активирован"}
+        {!user?.isActivated ? "Аккаунт не активирован" : "Аккаунт активирован"}
       </h3>
       <p>{user?.id}</p>
-    </StyledProfile>
+    </Form>
   );
 };

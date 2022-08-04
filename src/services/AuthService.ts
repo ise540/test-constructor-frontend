@@ -24,4 +24,12 @@ export default class AuthService {
   static async refresh(): Promise<AxiosResponse<AuthResponse>> {
     return $api.post<AuthResponse>("/user/refresh");
   }
+
+  static async recover(email: string): Promise<AxiosResponse<AuthResponse>> {
+    return $api.post<AuthResponse>("/user/password", { email });
+  }
+
+  static async setNewPassword(link: string, password: string): Promise<AxiosResponse<AuthResponse>> {
+    return $api.post<AuthResponse>(`/user/password/${link}`, {password});
+  }
 }

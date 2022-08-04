@@ -22,8 +22,6 @@ const StyledButton = styled(Button)<ButtonProps>`
 
 export const NavButton: FC<ButtonProps> = ({
   onClick,
-  fontSize,
-  margin,
   children,
 }) => {
   return (

@@ -1,3 +1,4 @@
+import { Button, Paper } from "@mui/material";
 import { useEffect } from "react";
 import { useParams } from "react-router";
 import styled from "styled-components";
@@ -16,6 +17,19 @@ const LoaderContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+`;
+
+const StyledPage = styled(Paper)`
+  padding: 10px 30px;
+`;
+
+const StyledDiv = styled.div`
+  display: flex;
+  flex-direction: row-reverse;
+`;
+
+const StyledH1 = styled.h1`
+  text-align: center;
 `;
 
 export const PassingTest = () => {
@@ -39,6 +53,16 @@ export const PassingTest = () => {
     }
   );
 
+  const [submitFetching, isSubmitLoading, submitError] = useFetching(
+    async () => {
+      if (id) await AnswerService.submit(id);
+    }
+  );
+
+  const submitAnswers = () => {
+    submitFetching();
+  };
+
   useEffect(() => {
     testFetching();
     answersFetching();
@@ -51,12 +75,20 @@ export const PassingTest = () => {
           <Loader />
         </LoaderContainer>
       ) : (
-        <div>
-          <h1>{currentTest.title}</h1>
+        <StyledPage>
+          <StyledH1>{currentTest.title}</StyledH1>
           {currentTest.questions.map((item) => {
             return <Question key={item.id} question={item} />;
           })}
-        </div>
+          <StyledDiv>
+            <Button
+              variant="contained"
+              onClick={() => submitAnswers()}
+            >
+              Отправить
+            </Button>
+          </StyledDiv>
+        </StyledPage>
       )}
     </div>
   );

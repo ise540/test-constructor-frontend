@@ -8,4 +8,7 @@ export default class AnswerService {
   static async getAll(testId: string) {
     return $api.get<IUserAnswer[]>(`/answer/${testId}`);
   }
+  static async submit(testId: string) {
+    return $api.post<IUserAnswer[]>(`/answer/submit`, {testId});
+  }
 }

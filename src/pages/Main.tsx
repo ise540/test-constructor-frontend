@@ -4,7 +4,7 @@ import { useFetching } from "../hooks/useFetch";
 import TestService from "../services/TestService";
 import { setTests } from "../store/tests/testsSlice";
 import { Loader } from "../components/Loader";
-import { TestTable } from "../components/TestTable";
+import { TestTable } from "../components/Tables/TestTable";
 import styled from "styled-components";
 
 const LoaderContainer = styled.div`
@@ -34,7 +34,7 @@ export const Main = () => {
 
   return (
     <div>
-      <StyledH1>All User`s Tests across The World</StyledH1>
+      <StyledH1>Тесты всех пользователей</StyledH1>
       {isTestLoading ? (
         <LoaderContainer>
           <Loader />

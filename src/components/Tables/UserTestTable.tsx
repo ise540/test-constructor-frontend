@@ -12,14 +12,14 @@ import {
 } from "@mui/material";
 import { FC, useState } from "react";
 import { useNavigate } from "react-router";
-import { useAppDispatch, useAppSelector } from "../hooks/redux";
-import { useFetching } from "../hooks/useFetch";
-import { ITest } from "../models/ITest";
-import TestService from "../services/TestService";
-import { setCurrentTest } from "../store/currentTest/currentTestSlice";
-import { removeTest } from "../store/tests/testsSlice";
-import dateToString from "../utils/DateToString";
-import { ConfirmModal } from "./ConfirmModal";
+import { useAppDispatch, useAppSelector } from "../../hooks/redux";
+import { useFetching } from "../../hooks/useFetch";
+import { ITest } from "../../models/ITest";
+import TestService from "../../services/TestService";
+import { setCurrentTest } from "../../store/currentTest/currentTestSlice";
+import { removeTest } from "../../store/tests/testsSlice";
+import dateToString from "../../utils/DateToString";
+import { ConfirmModal } from "../ConfirmModal";
 
 interface TestItemProps {
   tests: ITest[];
@@ -48,7 +48,7 @@ export const UserTestTable: FC<TestItemProps> = ({ tests }) => {
 
   return (
     <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+      <Table sx={{ minWidth: 650 }}>
         <TableHead>
           <TableRow>
             <TableCell>Title</TableCell>

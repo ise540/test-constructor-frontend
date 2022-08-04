@@ -21,7 +21,11 @@ export const Question: FC<QuestionProps> = ({ question }) => {
     <StyledQuestion>
       <h2>Вопрос №{question.order}</h2>
       <h3>{question.description}</h3>
-      <Answers key={question.id} questionType={question.type} answers={question.answers} />
+      <Answers
+        key={question.id}
+        questionType={question.type}
+        answers={question.answers}
+      />
     </StyledQuestion>
   );
 };

@@ -10,6 +10,9 @@ import { NewTest } from "../pages/NewTest";
 import { Profile } from "../pages/Profile";
 import { Registration } from "../pages/Registration";
 import { PassingTest } from "../pages/PassingTest";
+import { Activation } from "../pages/Activation";
+import { ForgotPassword } from "../pages/ForgotPassword";
+import { ResetPassword } from "../pages/ResetPassword";
 
 export const AppRouter = () => {
   const isAuth = useAppSelector((state) => state.user.isAuth);
@@ -22,6 +25,9 @@ export const AppRouter = () => {
             <Route index element={<Login />} />
             <Route path="registration" element={<Registration />} />
             <Route path="login" element={<Login />} />
+            <Route path="activation" element={<Activation />} />
+            <Route path="recover" element={<ForgotPassword />} />
+            <Route path="reset/:link" element={<ResetPassword />} />
             <Route path="*" element={<Login />} />
           </>
         ) : (
@@ -29,6 +35,7 @@ export const AppRouter = () => {
             <Route index element={<Main />} />
             <Route path="profile" element={<Profile />} />
             <Route path="completed-tests" element={<CompletedTests />} />
+            <Route path="activation" element={<Activation />} />
             <Route path="my-tests" element={<MyTests />} />
             <Route path="my-tests/edit/:id" element={<EditTest />} />
             <Route path="my-tests/new-test/:id" element={<NewTest />} />

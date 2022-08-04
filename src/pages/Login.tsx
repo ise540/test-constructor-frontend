@@ -1,8 +1,11 @@
-import { Button, Input } from "@mui/material";
+import { AccountCircle } from "@mui/icons-material";
+import { Button, InputAdornment, TextField } from "@mui/material";
 import { FC, useState } from "react";
 import { useNavigate } from "react-router";
+import { Form } from "../components/Form";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { fetchUserLogin } from "../store/auth/asyncActions";
+import KeyIcon from '@mui/icons-material/Key';
 
 export const Login: FC = () => {
   const [email, setEmail] = useState<string>("");
@@ -15,35 +18,39 @@ export const Login: FC = () => {
 
   function login() {
     dispatch(fetchUserLogin(email, password));
-    navigate('/')
+    navigate("/");
   }
 
   return (
-    <div>
-      <Input
+    <Form header={"Авторизация"}>
+      <TextField
+        label="Логин"
         value={email}
         onChange={(event) => setEmail(event.target.value)}
-        placeholder="email"
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <AccountCircle />
+            </InputAdornment>
+          ),
+        }}
+        variant="outlined"
       />
-      <Input
+      <TextField
         value={password}
         onChange={(event) => setPassword(event.target.value)}
-        placeholder="password"
+        label="Пароль"
+        type="password"
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <KeyIcon />
+            </InputAdornment>
+          ),
+        }}
+        variant="outlined"
       />
-      <Button onClick={login}>Авторизация</Button>
-      <div>
-        {userState.isLoading ? (
-          "loading..."
-        ) : (
-          <div>
-            <div>{userState.user?.email}</div>
-            <div>{userState.user?.id}</div>
-            <div>{userState.user?.isActivated}</div>
-            <div>{userState.token}</div>
-            <div>{userState.error}</div>
-          </div>
-        )}
-      </div>
-    </div>
+      <Button  variant="contained" color="success" onClick={login}>Войти</Button>
+    </Form>
   );
 };

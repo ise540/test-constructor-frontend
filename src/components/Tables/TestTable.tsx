@@ -11,7 +11,7 @@ import {
 import { FC } from "react";
 import { useNavigate } from "react-router";
 import LaunchIcon from '@mui/icons-material/Launch';
-import { ITest } from "../models/ITest";
+import { ITest } from "../../models/ITest";
 
 
 interface TestItemProps {
@@ -23,7 +23,7 @@ export const TestTable: FC<TestItemProps> = ({ tests }) => {
 
   return (
     <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+      <Table sx={{ minWidth: 650 }}>
         <TableHead>
           <TableRow>
             <TableCell>Title</TableCell>

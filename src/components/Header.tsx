@@ -36,10 +36,10 @@ export const Header: FC<HeaderProps> = () => {
     <StyledHeader>
       <Logo onClick={navToMain}/>
       {!isAuth ? (
-        <>
+        <div>
           <NavButton onClick={navToRegistration}>Регистрация</NavButton>
           <NavButton onClick={navToLogin}>Вход</NavButton>
-        </>
+        </div>
       ) : (
         <DropdownMenuButton/>
       )}
