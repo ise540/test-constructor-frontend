@@ -30,7 +30,7 @@ export const Main = () => {
 
   useEffect(() => {
     testFetching();
-  }, [testFetching]);
+  }, []);
 
   return (
     <div>

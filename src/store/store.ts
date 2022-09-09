@@ -4,12 +4,14 @@ import userReducer from "./auth/userSlice";
 import currentTestReducer from "./currentTest/currentTestSlice";
 import testsReducer from "./tests/testsSlice";
 import answersReducer from "./answers/answerSlice";
+import popupsReducer from "./popups/popupSlice";
 
 const rootReducer = combineReducers({
   user: userReducer,
   tests: testsReducer,
   currentTest: currentTestReducer,
   answers: answersReducer,
+  popups: popupsReducer
 });
 
 export const setupStore = () => {

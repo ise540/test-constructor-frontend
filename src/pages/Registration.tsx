@@ -3,28 +3,34 @@ import { Button, InputAdornment, TextField } from "@mui/material";
 import { FC, useState } from "react";
 import { useNavigate } from "react-router";
 import { Form } from "../components/Form";
-import { useAppDispatch } from "../hooks/redux";
+import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { fetchUserRegistration } from "../store/auth/asyncActions";
-import KeyIcon from '@mui/icons-material/Key';
+import KeyIcon from "@mui/icons-material/Key";
+import { useAddPopup } from "../hooks/usePopup";
 
 export const Registration: FC = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [repeatPassword, setRepeatPassword] = useState<string>("");
+  const error = useAppSelector((state) => state.user.error);
 
   const navigate = useNavigate();
 
   const dispatch = useAppDispatch();
+  const showPopup = useAddPopup();
 
   function registration() {
-    if(password===repeatPassword && password) {
-      dispatch(fetchUserRegistration(email, password));
-      navigate("/");
-    }
+    if(password===repeatPassword && password && error) {
+      dispatch(fetchUserRegistration(email, password))
+    } else if (!password) {
+      showPopup("Введите пароль!")
+    } else if(password!==repeatPassword){
+      showPopup("Пароли не совпадают!")
+    } 
   }
 
   return (
-    <Form header="Регистрация">
+    <Form header="Регистрация" onSubmit={registration}>
       <TextField
         label="Логин"
         value={email}
@@ -39,8 +45,8 @@ export const Registration: FC = () => {
         variant="outlined"
       />
       <TextField
-       value={password}
-       onChange={(event) => setPassword(event.target.value)}
+        value={password}
+        onChange={(event) => setPassword(event.target.value)}
         label="Пароль"
         type="password"
         InputProps={{
@@ -53,8 +59,8 @@ export const Registration: FC = () => {
         variant="outlined"
       />
       <TextField
-       value={repeatPassword}
-       onChange={(event) => setRepeatPassword(event.target.value)}
+        value={repeatPassword}
+        onChange={(event) => setRepeatPassword(event.target.value)}
         label="Повторите пароль"
         type="password"
         InputProps={{
@@ -66,7 +72,9 @@ export const Registration: FC = () => {
         }}
         variant="outlined"
       />
-      <Button  variant="contained" color="success" onClick={registration}>Зарегистрировать</Button>
+      <Button type="submit" variant="contained" color="success">
+        Зарегистрировать
+      </Button>
     </Form>
   );
 };

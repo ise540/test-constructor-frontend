@@ -110,7 +110,7 @@ export const UserTestTable: FC<TestItemProps> = ({ tests }) => {
           open={open}
           setOpen={setOpen}
           onConfirm={() => deleteTest()}
-        >{`Are you sure to delete test "${selectedId}"`}</ConfirmModal>
+        >{`Уверены, что хотите удалить тест "${selectedId}"?`}</ConfirmModal>
       </Table>
     </TableContainer>
   );

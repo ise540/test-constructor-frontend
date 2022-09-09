@@ -1,15 +1,11 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
+import { useEffect, useState } from "react";
 import { Loader } from "../components/Loader";
+import { StyledH1 } from "../components/styled";
 import { CompletedTable } from "../components/Tables/CompletedTable";
-import { useAppDispatch, useAppSelector } from "../hooks/redux";
+import { useAppSelector } from "../hooks/redux";
 import { useFetching } from "../hooks/useFetch";
 import { IComplitedTest } from "../models/IComplitedtest";
 import TestService from "../services/TestService";
-
-const StyledH1 = styled.h1`
-  text-align: center;
-`;
 
 export const CompletedTests = () => {
   const userId = useAppSelector((state) => state.user.user?.id);
@@ -26,7 +22,7 @@ export const CompletedTests = () => {
 
   useEffect(() => {
     resultsFetching();
-  }, [resultsFetching]);
+  }, []);
 
   return (
     <div>

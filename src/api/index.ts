@@ -1,5 +1,8 @@
 import axios, { AxiosRequestConfig } from "axios";
+import { useAddPopup } from "../hooks/usePopup";
 import AuthService from "../services/AuthService";
+
+
 
 const $api = axios.create({
   withCredentials: true,
@@ -25,10 +28,11 @@ export function getConfig(token?: string, params?: any): AxiosRequestConfig {
 }
 
 $api.interceptors.response.use(
+  
   (config) => config,
   async (error) => {
-    const originalRequest = error.config;
-    console.log(error.response.status);
+    
+    const originalRequest = await error.config;
     if (
       error.response.status === 401 &&
       originalRequest &&

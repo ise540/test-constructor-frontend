@@ -5,24 +5,27 @@ import { useNavigate } from "react-router";
 import { Form } from "../components/Form";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { fetchUserLogin } from "../store/auth/asyncActions";
-import KeyIcon from '@mui/icons-material/Key';
+import KeyIcon from "@mui/icons-material/Key";
+import { useAddPopup } from "../hooks/usePopup";
 
 export const Login: FC = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const showPopup = useAddPopup()
 
-  const userState = useAppSelector((state) => state.user);
   const navigate = useNavigate();
 
   const dispatch = useAppDispatch();
 
   function login() {
-    dispatch(fetchUserLogin(email, password));
-    navigate("/");
+    if(!email || !password) {
+      showPopup("Введите логин и пароль!")
+    } else dispatch(fetchUserLogin(email, password));
   }
 
+
   return (
-    <Form header={"Авторизация"}>
+    <Form header={"Авторизация"} onSubmit={login}>
       <TextField
         label="Логин"
         value={email}
@@ -50,7 +53,15 @@ export const Login: FC = () => {
         }}
         variant="outlined"
       />
-      <Button  variant="contained" color="success" onClick={login}>Войти</Button>
+      <Button
+        sx={{ width: "200px" }}
+        onClick={() => navigate("recover", { replace: true })}
+      >
+        Забыли пароль?
+      </Button>
+      <Button type="submit" variant="contained" color="success">
+        Войти
+      </Button>
     </Form>
   );
 };

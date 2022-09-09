@@ -9,22 +9,25 @@ import { Navigate, useNavigate, useParams } from "react-router";
 
 export const ResetPassword = () => {
   const { link } = useParams();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [password, setPassword] = useState<string>("");
   const [repeatPassword, setRepeatPassword] = useState<string>("");
 
-  if(!link) navigate("/", {replace:true})
+  if (!link) navigate("/", { replace: true });
 
-  const [resetFetching, isLoading, resetError] = useFetching(async () => {
-    if(!link) return
-    await AuthService.setNewPassword(link, password);
-  });
+  const [resetFetching, isLoading, resetError] = useFetching(
+    async (password: string) => {
+      if (!link) return;
+      await AuthService.setNewPassword(link, password);
+    }
+  );
   const reset = () => {
-    resetFetching();
+    if (password === repeatPassword) resetFetching(password);
+    else console.log("passwords dont match");
   };
 
   return (
-    <Form header="Забыли пароль?">
+    <Form header="Забыли пароль?" onSubmit={reset}>
       <TextField
         label="Пароль"
         value={password}
@@ -56,9 +59,9 @@ export const ResetPassword = () => {
       />
 
       <Button
+        type="submit"
         variant="contained"
         color="success"
-        onClick={() => reset()}
       >
         Сменить пароль
       </Button>

@@ -1,37 +1,32 @@
 import { Paper } from "@mui/material";
-import { FC } from "react";
+import React, { FC } from "react";
 import styled from "styled-components";
+import { StyledH1, StyledPaper } from "./styled";
 
-const StyledPaper = styled(Paper)`
-  border: 2px solid black;
-  width: 70%;
-  height: fit-content;
-  margin: 15% 15%;
-  padding: 50px;
-`;
-
-const StyledDiv = styled.div`
+const StyledDiv = styled.form`
   display: flex;
   flex-direction: column;
   gap: 20px;
 `;
 
-const StyledH1 = styled.h1`
-  text-align: center;
-  margin-bottom: 20px;
-`;
-
 interface FormProps {
   header: string;
   children: React.ReactNode;
+  onSubmit: () => void;
 }
 
-export const Form: FC<FormProps> = ({ header, children }) => {
-  console.log(children);
+export const Form: FC<FormProps> = ({ header, children, onSubmit }) => {
   return (
     <StyledPaper>
       <StyledH1>{header}</StyledH1>
-      <StyledDiv>{children}</StyledDiv>
+      <StyledDiv
+        onSubmit={(event) => {
+          event.preventDefault();
+          onSubmit();
+        }}
+      >
+        {children}
+      </StyledDiv>
     </StyledPaper>
   );
 };

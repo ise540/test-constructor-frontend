@@ -25,10 +25,15 @@ export const ConfirmModal: FC<ConfirmModalProps> = ({
     <BasicModal open={open} setOpen={setOpen}>
       <h3>{children}</h3>
       <StyledDiv>
-        <Button variant="outlined" onClick={() => setOpen(false)}>
+        <Button
+          sx={{ width: "45%", fontSize:"14px" }}
+          variant="outlined"
+          onClick={() => setOpen(false)}
+        >
           Отмена
         </Button>
         <Button
+           sx={{ width: "45%", fontSize:"14px" }}
           color="error"
           variant="contained"
           onClick={() => {

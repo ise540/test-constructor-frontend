@@ -1,15 +1,18 @@
 import { Button, Paper } from "@mui/material";
 import { useEffect } from "react";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import styled from "styled-components";
 import { Loader } from "../components/Loader";
+import { StyledH1 } from "../components/styled";
 import { Question } from "../components/TestPassForm/Question";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { useFetching } from "../hooks/useFetch";
+import { useAddPopup } from "../hooks/usePopup";
 import AnswerService from "../services/AnswerService";
 import TestService from "../services/TestService";
 import { addAnswers } from "../store/answers/answerSlice";
 import { setCurrentTest } from "../store/currentTest/currentTestSlice";
+import { PopupTypes } from "../types/PopupTypes";
 
 const LoaderContainer = styled.div`
   width: 100vw;
@@ -28,14 +31,12 @@ const StyledDiv = styled.div`
   flex-direction: row-reverse;
 `;
 
-const StyledH1 = styled.h1`
-  text-align: center;
-`;
-
 export const PassingTest = () => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
   const currentTest = useAppSelector((state) => state.currentTest.currentTest);
+  const navigate = useNavigate();
+  const showPopup = useAddPopup();
 
   const [testFetching, isTestLoading, testError] = useFetching(async () => {
     if (id) {
@@ -60,13 +61,17 @@ export const PassingTest = () => {
   );
 
   const submitAnswers = () => {
-    submitFetching();
+    submitFetching()
+    if (!submitError) {
+      navigate("/", { replace: true });
+      showPopup("Тест успешно отправлен", PopupTypes.SUCCESS)
+    }
   };
 
   useEffect(() => {
     testFetching();
     answersFetching();
-  }, [testFetching, answersFetching]);
+  }, []);
 
   return (
     <div>
@@ -81,10 +86,7 @@ export const PassingTest = () => {
             return <Question key={item.id} question={item} />;
           })}
           <StyledDiv>
-            <Button
-              variant="contained"
-              onClick={() => submitAnswers()}
-            >
+            <Button variant="contained" onClick={() => submitAnswers()}>
               Отправить
             </Button>
           </StyledDiv>

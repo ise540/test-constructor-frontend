@@ -14,7 +14,7 @@ const StyledBox = styled(Box)`
   top: 50%;
   left: 50%;
   padding: 50px;
-  min-width: 500px;
+  min-width: 300px;
   min-height: 300px;
 
   transform: translate(-50%, -50%);

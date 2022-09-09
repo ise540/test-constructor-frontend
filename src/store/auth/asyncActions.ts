@@ -7,10 +7,16 @@ import {
 } from "./userSlice";
 import { AppDispatch, RootState } from "../store";
 import { AuthResponse } from "../../models/AuthResponse";
+import { addPopup } from "../popups/popupSlice";
+
+
+
 
 export const fetchUserRegistration =
   (email: string, password: string) => async (dispatch: AppDispatch) => {
+
     try {
+      
       dispatch(fetchStart());
       const response = await $api.post<AuthResponse>("/user/registration", {
         email,
@@ -20,7 +26,9 @@ export const fetchUserRegistration =
       localStorage.setItem('accessToken', response.data.accessToken)
 
     } catch (e: any) {
-      dispatch(fetchLoginError(e.response.data.error));
+      console.log(e)
+      dispatch(fetchLoginError(e.response.data.message));
+      dispatch(addPopup({message:e.response.data.message}))
     }
   };
 
@@ -38,6 +46,7 @@ export const fetchUserLogin =
       localStorage.setItem('accessToken', response.data.accessToken)
     } catch (e: any) {
       dispatch(fetchLoginError(e.response.data.message));
+      dispatch(addPopup({message:e.response.data.message}))
     }
   };
 
@@ -50,5 +59,6 @@ export const fetchUserLogout = () => async (dispatch: AppDispatch, getState: () 
     localStorage.removeItem('accessToken')
   } catch (e: any) {
     dispatch(fetchLoginError(e.response.data.message));
+    dispatch(addPopup({message:e.response.data.message}))
   }
 };
